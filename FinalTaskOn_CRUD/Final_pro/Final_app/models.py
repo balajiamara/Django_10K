@@ -6,4 +6,5 @@ class Insta_Acc(models.Model):
     username=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
     email=models.EmailField(unique=True)
-    profile_pic=models.FileField(upload_to="profile/")
+    profile_pic=models.URLField()
+    # profile_pic=models.FileField(upload_to="profile/")

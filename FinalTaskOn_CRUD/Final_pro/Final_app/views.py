@@ -6,6 +6,8 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.http.multipartparser import MultiPartParser
 from .serializers import InstaAccSerializer
 import json
+import cloudinary
+
 
 
 def validate_file(file_obj):
@@ -32,6 +34,10 @@ def reg_Insta_Acc(request):
     pw=request.POST.get('password')
     em=request.POST.get('email')
     pp=request.FILES['profile_pic']         #or use request.FILES.get('profile_pic')
+    img_url=cloudinary.uploader.upload(pp)   
+    print(img_url["secure_url"])
+
+    
 
     is_valid, msg=validate_file(pp)
     if not is_valid:
@@ -39,8 +45,8 @@ def reg_Insta_Acc(request):
     # else:
     #     return HttpResponse(msg)
     
-    new_acc=Insta_Acc.objects.create(userid=id,username=username,password=pw,email=em,profile_pic=pp)
-    return JsonResponse({'Message': 'Insta Account Registered Successfully'})
+    new_acc=Insta_Acc.objects.create(userid=id,username=username,password=pw,email=em,profile_pic=img_url["secure_url"])
+    return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc)})
 
 
 @csrf_exempt
