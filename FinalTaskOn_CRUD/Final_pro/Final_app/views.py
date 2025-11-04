@@ -7,6 +7,7 @@ from django.http.multipartparser import MultiPartParser
 from .serializers import InstaAccSerializer
 import json
 import cloudinary
+from django.forms.models import model_to_dict
 
 
 
@@ -46,8 +47,11 @@ def reg_Insta_Acc(request):
     #     return HttpResponse(msg)
     
     new_acc=Insta_Acc.objects.create(userid=id,username=username,password=pw,email=em,profile_pic=img_url["secure_url"])
-    return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc.values())})
-
+    # return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc.values)})
+    return JsonResponse({
+    'Message': 'Insta Account Registered Successfully',
+    'details': model_to_dict(new_acc)
+})
 
 @csrf_exempt
 def update_Insta_Acc(request,id):
