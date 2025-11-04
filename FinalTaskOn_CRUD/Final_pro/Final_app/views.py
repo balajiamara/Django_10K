@@ -37,7 +37,7 @@ def reg_Insta_Acc(request):
     img_url=cloudinary.uploader.upload(pp)   
     print(img_url["secure_url"])
 
-    
+
 
     is_valid, msg=validate_file(pp)
     if not is_valid:
@@ -46,7 +46,7 @@ def reg_Insta_Acc(request):
     #     return HttpResponse(msg)
     
     new_acc=Insta_Acc.objects.create(userid=id,username=username,password=pw,email=em,profile_pic=img_url["secure_url"])
-    return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc)})
+    return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc.values())})
 
 
 @csrf_exempt
