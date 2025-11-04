@@ -30,28 +30,32 @@ def get_Insta_Acc(request):
 
 @csrf_exempt
 def reg_Insta_Acc(request):
-    id=request.POST.get('userid')
-    username=request.POST.get('username')
-    pw=request.POST.get('password')
-    em=request.POST.get('email')
-    pp=request.FILES['profile_pic']         #or use request.FILES.get('profile_pic')
-    img_url=cloudinary.uploader.upload(pp)   
-    print(img_url["secure_url"])
+    try:
+        id=request.POST.get('userid')
+        username=request.POST.get('username')
+        pw=request.POST.get('password')
+        em=request.POST.get('email')
+        pp=request.FILES['profile_pic']         #or use request.FILES.get('profile_pic')
+        img_url=cloudinary.uploader.upload(pp)   
+        print(img_url["secure_url"])
 
 
 
-    is_valid, msg=validate_file(pp)
-    if not is_valid:
-        return JsonResponse({'Error':msg})
-    # else:
-    #     return HttpResponse(msg)
-    
-    new_acc=Insta_Acc.objects.create(userid=id,username=username,password=pw,email=em,profile_pic=img_url["secure_url"])
-    # return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc.values)})
-    return JsonResponse({
-    'Message': 'Insta Account Registered Successfully',
-    'details': model_to_dict(new_acc)
-})
+        is_valid, msg=validate_file(pp)
+        if not is_valid:
+            return JsonResponse({'Error':msg})
+        # else:
+        #     return HttpResponse(msg)
+
+        new_acc=Insta_Acc.objects.create(userid=id,username=username,password=pw,email=em,profile_pic=img_url["secure_url"])
+        # return JsonResponse({'Message': 'Insta Account Registered Successfully',"details":list(new_acc.values)})
+        return JsonResponse({
+        'Message': 'Insta Account Registered Successfully',
+        'details': model_to_dict(new_acc)
+        })
+    except Exception as e:
+        return JsonResponse({'Error':str(e)}, status=400)
+    return JsonResponse({'Error':'Invalid Request Method'}, status=405)
 
 @csrf_exempt
 def update_Insta_Acc(request,id):
