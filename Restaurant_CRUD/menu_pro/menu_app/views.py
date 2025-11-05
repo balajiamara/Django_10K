@@ -32,22 +32,36 @@ def get_dish(req):
 #     return JsonResponse({'msg':'Dish Added Successfully'})
 
 
-
 @csrf_exempt
 def add_dish(req):
     if req.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
-    # Combine POST and FILES manually
+    if 'Image' not in req.FILES:
+        return JsonResponse({'error': 'Image file is required'}, status=400)
+
+    image_file = req.FILES['Image']
+
+    #  Validate size (max 2 MB)
+    max_size = 2 * 1024 * 1024
+    if image_file.size > max_size:
+        return JsonResponse({'error': 'Image size should not exceed 2 MB'}, status=400)
+
+    #  Validate file type (only JPG, PNG)
+    allowed_types = ['image/jpeg', 'image/png']
+    if image_file.content_type not in allowed_types:
+        return JsonResponse({'error': 'Only JPEG and PNG images are allowed'}, status=400)
+
+    #  Upload image to Cloudinary
+    upload_result = cloudinary.uploader.upload(image_file)
+    image_url = upload_result.get('secure_url')
+
+    #  Merge POST data with the image URL
     data = req.POST.copy()
-    if req.FILES:
-        data.update(req.FILES)
+    data['Image'] = image_url
 
+    # Save dish info
     serializer = MenuSerializer(data=data)
-
-    img_url=cloudinary.uploader.upload(req.FILES['Image'])
-    print(img_url['secure_url'])
-
     if serializer.is_valid():
         serializer.save()
         return JsonResponse({'msg': 'Dish Added Successfully'}, status=201)
