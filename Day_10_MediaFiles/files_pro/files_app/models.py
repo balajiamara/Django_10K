@@ -5,7 +5,7 @@ from django.core.validators import MinLengthValidator, RegexValidator
 # Create your models here.
 class User(models.Model):
     name=models.CharField(max_length=25, 
-                          validators=[MinLengthValidator(20),
+                          validators=[MinLengthValidator(3),
                                       RegexValidator(
                                           regex=r'^[A-Za-z]+$',
                                           message='Name must contain alphabets only'
