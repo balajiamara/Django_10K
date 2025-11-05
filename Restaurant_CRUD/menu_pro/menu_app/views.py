@@ -5,6 +5,7 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.http.multipartparser import MultiPartParser
 from .serializers import MenuSerializer
 from .models import Menu
+import cloudinary
 import json
 
 
@@ -43,6 +44,9 @@ def add_dish(req):
         data.update(req.FILES)
 
     serializer = MenuSerializer(data=data)
+
+    img_url=cloudinary.uploader.upload(req.FILES['Image'])
+    print(img_url['secure_url'])
 
     if serializer.is_valid():
         serializer.save()

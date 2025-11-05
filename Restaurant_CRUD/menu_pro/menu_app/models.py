@@ -8,4 +8,5 @@ class Menu(models.Model):
     DishName=models.CharField(max_length=50)
     Ingredients=models.TextField()
     Price=models.FloatField()
-    Image=models.FileField(upload_to="profile/")
+    # Image=models.FileField(upload_to="profile/")
+    Image=models.URLField()
