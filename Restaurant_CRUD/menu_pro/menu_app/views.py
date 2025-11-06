@@ -99,7 +99,18 @@ def update_dish(req,id):
         if price:
             menu.Price=price
         if pic:
-            menu.Image=pic
+
+            max_size=2*1024*1024
+            if pic.size>max_size:
+                return HttpResponse('Image size should not exceed 2MB',status=400)
+            
+            allowed_types=['image/jpeg','image/png']
+            if pic.content_type not in allowed_types:
+                return JsonResponse({'error':'Only JPEG and PNG images are allowed'},status=400)
+
+            upload_result=cloudinary.uploader.upload(pic)
+            image_url=upload_result.get('secure_url')
+            menu.Image=image_url
 
         menu.save()
         return JsonResponse({'Message':'Menu is succesfully Updated'})
