@@ -34,6 +34,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
+CORS_ALLOWED_ORIGINS = [                #allowing origins
+    "http://localhost:3000",
+    "https://your-frontend-domain.com",
+]
+
+
 
 # Application definition
 
@@ -45,10 +51,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'menu_app',
-    'cloudinary'
+    'cloudinary',
+    'corsheaders'       #regestring cors
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',            #adding cors
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
