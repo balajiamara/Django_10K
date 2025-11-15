@@ -12,6 +12,11 @@ import json
 # def validate_file(file):
 #     max
 
+def frontend(request):
+    return render(request, "index.html")
+
+
+
 # Create your views here.
 def get_dish(req):
     all_menu=Menu.objects.all()
