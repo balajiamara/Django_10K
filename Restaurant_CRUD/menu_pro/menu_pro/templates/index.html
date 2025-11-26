@@ -182,6 +182,7 @@
 
 <script>
     // Use the Render deployment URL
+    // const API_BASE_URL = "http://127.0.0.1:8000/";
     const API_BASE_URL = "https://restaurant-menu-4z3p.onrender.com/";
 
     // Fetch & Display Menu Items
@@ -194,6 +195,7 @@
             const container = document.getElementById("menuList");
             container.innerHTML = "";
 
+                        // <p><strong>Category:</strong> ₹${item.Category}</p>
             data.Menu_card.forEach(item => {
                 container.innerHTML += `
                     <div class="card">
