@@ -190,6 +190,19 @@ def update_info(req, id):
     return JsonResponse({'Message': 'Company updated successfully'})
 
 
+@csrf_exempt
+def del_info(req, id):
+    # Allow only DELETE
+    if req.method != 'DELETE':
+        return JsonResponse({'Error': 'Only DELETE method is allowed'}, status=405)
 
-def del_info(req):
-    pass
+    # Try fetching the company
+    try:
+        company = Company.objects.get(id=id)
+    except Company.DoesNotExist:
+        return JsonResponse({'Error': 'Company Not Found'}, status=404)
+
+    # Delete the company
+    company.delete()
+
+    return JsonResponse({'Message': 'Company deleted successfully'}, status=200)
